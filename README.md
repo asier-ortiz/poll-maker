@@ -1,6 +1,6 @@
 # Poll Maker
 
-.
+Poll web app build with Laravel Framework.
 
 ## How to build
 
