@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+
+    app:
+        build:
+            context: .
+            dockerfile: app.dockerfile
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - db
+
+    web:
+        build:
+            context: .
+            dockerfile: web.dockerfile
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - app
+        ports:
+            - "80:80"
+
+    db:
+        image: mysql:8.0.30
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        ports:
+            - "3306:3306"
+
+    pma:
+        image: phpmyadmin/phpmyadmin:5.2.0
+        platform: linux/amd64
+        env_file:
+            - .env
+        environment:
+            PMA_HOST: ${DB_USERNAME}
+            PMA_PORT: ${DB_PORT}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            PMA_ARBITRARY: 1
+        depends_on:
+            - db
+        ports:
+            - "8081:80"
