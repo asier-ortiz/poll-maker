@@ -8,3 +8,11 @@
 
 /.github export-ignore
 CHANGELOG.md export-ignore
+
+# Mark frontend files as vendored dependencies
+resources/js/* linguist-vendored
+resources/css/* linguist-vendored
+public/* linguist-vendored
+vite.config.js linguist-vendored
+package.json linguist-vendored
+package-lock.json linguist-vendored
